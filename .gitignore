@@ -1,2 +1,2 @@
-# QtCreator build directories
+# QtCreator build directories should not be in git
 build-*
