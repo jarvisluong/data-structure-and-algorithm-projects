@@ -1,0 +1,2 @@
+I have used git a lot.
+Git is a really good way to manage the source code :)
