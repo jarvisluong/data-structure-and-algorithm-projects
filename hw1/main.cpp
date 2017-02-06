@@ -203,7 +203,9 @@ void cmd_read(Datastructure& ds, ostream& output, MatchIter begin, MatchIter end
     ifstream input(filename);
     if (input)
     {
+        output << "** Commands from '" << filename << "'" << endl;
         command_parser(ds, input, output, PromptStyle::NORMAL);
+        output << "** End of commands from '" << filename << "'" << endl;
     }
     else
     {
@@ -535,8 +537,8 @@ void help_command(Datastructure& /*ds*/, ostream& output, MatchIter /*begin*/, M
 
 void command_parser(Datastructure& ds, istream& input, ostream& output, PromptStyle promptstyle)
 {
-    static unsigned int nesting_level = 0; // UGLY! Remember nesting level to print correct amount of >:s.
-    if (promptstyle != PromptStyle::NO_NESTING) { ++nesting_level; }
+//    static unsigned int nesting_level = 0; // UGLY! Remember nesting level to print correct amount of >:s.
+//    if (promptstyle != PromptStyle::NO_NESTING) { ++nesting_level; }
 
     // Create regex <whitespace>(cmd1|cmd2|...)<whitespace>(.*)
     string cmds_regex_str = "[[:space:]]*(";
@@ -552,7 +554,8 @@ void command_parser(Datastructure& ds, istream& input, ostream& output, PromptSt
     string line;
     do
     {
-        output << string(nesting_level, '>') << " ";
+//        output << string(nesting_level, '>') << " ";
+        output << '>' << " ";
         getline(input, line, '\n');
 
         if (promptstyle != PromptStyle::NO_ECHO)
@@ -617,7 +620,7 @@ void command_parser(Datastructure& ds, istream& input, ostream& output, PromptSt
     }
     while (input);
 
-    if (promptstyle != PromptStyle::NO_NESTING) { --nesting_level; }
+//    if (promptstyle != PromptStyle::NO_NESTING) { --nesting_level; }
 }
 } // namespace
 
