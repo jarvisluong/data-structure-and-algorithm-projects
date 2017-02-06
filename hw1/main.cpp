@@ -84,9 +84,11 @@ StopwatchMode stopwatch_mode = StopwatchMode::OFF;
 class Stopwatch
 {
 public:
+    using Clock = std::chrono::high_resolution_clock;
+
     Stopwatch() : running(false) { }
-    void start() { running = true; starttime = std::chrono::system_clock::now(); }
-    void stop() { endtime = std::chrono::system_clock::now(); running = false; }
+    void start() { running = true; starttime = Clock::now(); }
+    void stop() { endtime = Clock::now(); running = false; }
     double elapsed()
     {
         if (!running)
@@ -96,13 +98,13 @@ public:
         }
         else
         {
-            std::chrono::duration<double> elapsed = std::chrono::system_clock::now() - starttime;
+            std::chrono::duration<double> elapsed = Clock::now() - starttime;
             return elapsed.count();
         }
     }
 private:
-    std::chrono::time_point<std::chrono::high_resolution_clock> starttime;
-    std::chrono::time_point<std::chrono::high_resolution_clock> endtime;
+    std::chrono::time_point<Clock> starttime;
+    std::chrono::time_point<Clock> endtime;
     bool running;
 };
 
@@ -519,6 +521,7 @@ vector<CmdInfo> cmds =
     {"help", "", &help_command},
     {"perftest", "([0-9]+)[[:space:]]+([0-9]+)[[:space:]]+([0-9]+(?:;[0-9]+)*)", &cmd_perftest},
     {"stopwatch", "(?:(on)|(off)|(next))", &cmd_stopwatch},
+    {"#", ".*", [](Datastructure&, ostream&, MatchIter, MatchIter){} },
 };
 
 void help_command(Datastructure& /*ds*/, ostream& output, MatchIter /*begin*/, MatchIter /*end*/)
