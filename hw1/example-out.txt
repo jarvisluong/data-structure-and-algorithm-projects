@@ -1,4 +1,5 @@
 > clear
+Cleared all persons
 > size
 Number of employees: 0
 > read 'example-data.txt'
