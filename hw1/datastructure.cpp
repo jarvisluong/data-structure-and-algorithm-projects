@@ -128,7 +128,7 @@ vector<Person *> Datastructure::personnel_salary_order()
                 _personnel_salary_order.push_back(_personnel[i]);
         }
         merge_sort(_personnel_salary_order, 0,
-                   _personnel_salary_order.size()-1, 'n');
+                   _personnel_salary_order.size()-1, 's');
         return _personnel_salary_order;
 }
 
