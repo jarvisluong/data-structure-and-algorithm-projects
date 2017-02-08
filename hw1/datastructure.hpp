@@ -11,33 +11,41 @@ using std::vector;
 
 struct Person
 {
-    string name;
-    int salary;
+        string name;
+        int salary;
+        Person(string name_add, int salary_add)
+        {
+                name = name_add;
+                salary = salary_add;
+        }
 };
 
 class Datastructure
 {
 public:
-    Datastructure();
-    ~Datastructure();
+Datastructure();
+~Datastructure();
 
-    void add_person(string name, int salary);
+void add_person(string name, int salary);
 
-    unsigned int size();
-    void clear();
+unsigned int size();
+void clear();
 
-    vector<Person*> personnel_alphabetically();
-    vector<Person*> personnel_salary_order();
+vector<Person*> personnel_alphabetically();
+vector<Person*> personnel_salary_order();
 
-    Person* min_salary();
-    Person* max_salary();
+Person* min_salary();
+Person* max_salary();
 
-    Person* median_salary();
-    Person* first_quartile_salary();
-    Person* third_quartile_salary();
+Person* median_salary();
+Person* first_quartile_salary();
+Person* third_quartile_salary();
 
 private:
-    // Add your implementation here
+//  Store the raw data with names and salaries of employees
+vector<Person*> _personnel;
+vector<Person*> _personnel_alphabetically;
+vector<Person*> _personnel_salary_order;
 };
 
 #endif // DATASTRUCTURE_HPP

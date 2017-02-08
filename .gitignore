@@ -1,2 +1,4 @@
 # QtCreator build directories should not be in git
 build-*
+# File management in OS X should not be in git 
+.DS_Store
