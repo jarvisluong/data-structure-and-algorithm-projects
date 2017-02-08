@@ -96,7 +96,7 @@ Datastructure::~Datastructure()
 
 void Datastructure::add_person(std::string name, int salary)
 {
-        Person to_be_added(name, salary);
+        Person* to_be_added(name, salary);
         _personnel.push_back(to_be_added);
 }
 
