@@ -13,11 +13,6 @@ struct Person
 {
         string name;
         int salary;
-        Person(string name_add, int salary_add)
-        {
-                name = name_add;
-                salary = salary_add;
-        }
 };
 
 class Datastructure
@@ -43,9 +38,13 @@ Person* third_quartile_salary();
 
 private:
 //  Store the raw data with names and salaries of employees
-vector<Person*> _personnel;
+vector<Person> _personnel;
 vector<Person*> _personnel_alphabetically;
 vector<Person*> _personnel_salary_order;
+
+// Check if the vector has been sorted or not
+bool _sorted_alphabetically = false;
+bool _sorted_salary_order = false;
 };
 
 #endif // DATASTRUCTURE_HPP

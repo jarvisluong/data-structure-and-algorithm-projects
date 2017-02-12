@@ -21,6 +21,8 @@ core
 !core/
 tags
 .DS_Store
+compile.sh
+hw1
 .directory
 *.debug
 Makefile*
