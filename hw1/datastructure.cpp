@@ -30,19 +30,14 @@ void merge(vector<Person*>& A, int begin, int middle, int end, char mode) {
                 while (j <= middle && k <= end) {
                         if (B[j]->name <= B[k]->name) {
                                 A[i] = B[j];
-                                j++;
+                                ++j;
                         } else {
                                 A[i] = B[k];
-                                k++;
+                                ++k;
                         }
-                        i++;
+                        ++i;
                 }
                 k = j>middle ? 0 : (middle-end);
-                // if (j > middle) {
-                //         k = 0;
-                // } else {
-                //         k = middle - end;
-                // }
                 for (j=i; j<=end; ++j) {
                         A[j] = B[j+k];
                 }
@@ -51,12 +46,12 @@ void merge(vector<Person*>& A, int begin, int middle, int end, char mode) {
                 while ((j <= middle) && (k <= end)) {
                         if (B[j]->salary <= B[k]->salary) {
                                 A[i] = B[j];
-                                j++;
+                                ++j;
                         } else {
                                 A[i] = B[k];
-                                k++;
+                                ++k;
                         }
-                        i++;
+                        ++i;
                 }
                 k = j>middle ? 0 : (middle-end);
                 for (j=i; j<=end; ++j) {
@@ -114,7 +109,7 @@ vector<Person *> Datastructure::personnel_alphabetically()
                 return _personnel_alphabetically;
         }
         _personnel_alphabetically.clear();
-        for (size_t i=0; i < _personnel.size(); i++) {
+        for (size_t i=0; i < _personnel.size(); ++i) {
                 _personnel_alphabetically.push_back(&_personnel[i]);
         }
         merge_sort(_personnel_alphabetically, 0,
@@ -129,7 +124,7 @@ vector<Person *> Datastructure::personnel_salary_order()
                 return _personnel_salary_order;
         }
         _personnel_salary_order.clear();
-        for (size_t i=0; i < _personnel.size(); i++) {
+        for (size_t i=0; i < _personnel.size(); ++i) {
                 _personnel_salary_order.push_back(&_personnel[i]);
         }
         merge_sort(_personnel_salary_order, 0,
