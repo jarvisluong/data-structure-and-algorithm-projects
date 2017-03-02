@@ -585,30 +585,30 @@ void cmd_titlelist(Datastructure& ds, ostream& output, MatchIter begin, MatchIte
     print_person_list(ds, ds.personnel_with_title(title), output);
 }
 
-void test_titlelist(Datastructure& ds)
-{
-    string title;
-    switch (random<int>(0,5))
-    {
-    case 0:
-        title = "Software developer";
-        break;
-    case 1:
-        title = "Web designer";
-        break;
-    case 2:
-        title = "Experience evangelist";
-        break;
-    case 3:
-        title = "General boss";
-        break;
-    case 4:
-        title = "Useless idiot";
-        break;
-    }
+//void test_titlelist(Datastructure& ds)
+//{
+//    string title;
+//    switch (random<int>(0,5))
+//    {
+//    case 0:
+//        title = "Software developer";
+//        break;
+//    case 1:
+//        title = "Web designer";
+//        break;
+//    case 2:
+//        title = "Experience evangelist";
+//        break;
+//    case 3:
+//        title = "General boss";
+//        break;
+//    case 4:
+//        title = "Useless idiot";
+//        break;
+//    }
 
-    ds.personnel_with_title(title);
-}
+//    ds.personnel_with_title(title);
+//}
 
 void cmd_find(Datastructure& ds, ostream& output, MatchIter begin, MatchIter end)
 {
@@ -708,7 +708,7 @@ vector<CmdInfo> cmds =
     {"size", "", &cmd_size, nullptr },
     {"clear", "", &cmd_clear, nullptr },
     {"underlings", "([0-9A-Za-z]+)", &cmd_underlings, nullptr },
-    {"titlelist", "'([a-zA-Z ]+)'", &cmd_titlelist, &test_titlelist },
+    {"titlelist", "'([a-zA-Z ]+)'", &cmd_titlelist, nullptr },
     {"alphalist", "", &NoParListCmd<&Datastructure::personnel_alphabetically>, [](auto& ds){ds.personnel_alphabetically();} },
     {"salarylist", "", &NoParListCmd<&Datastructure::personnel_salary_order>, [](auto& ds){ds.personnel_salary_order();} },
     {"ceo", "", &NoParPersonCmd<&Datastructure::find_ceo>, [](auto& ds){ds.find_ceo();} },
@@ -744,7 +744,7 @@ void cmd_perftest(Datastructure& ds, ostream& output, MatchIter begin, MatchIter
     output << "WARNING: Debug STL enabled, performance will be worse than expected (maybe also asymptotically)!" << endl;
 #endif // _GLIBCXX_DEBUG
 
-    vector<string> optional_cmds({"remove", "nearest_common_boss"});
+    vector<string> optional_cmds({"remove", "nearest_common_boss", "higher_lower_ranks"});
 
     string commandstr = *begin++;
     unsigned int timeout = convert_string_to<unsigned int>(*begin++);
@@ -784,7 +784,7 @@ void cmd_perftest(Datastructure& ds, ostream& output, MatchIter begin, MatchIter
     { // Add all commands
         for (auto& i : cmds)
         {
-            if (i.testfunc && (testcmds.empty() || find(testcmds.begin(), testcmds.end(), i.cmd) != testcmds.end()))
+            if (i.testfunc)
             {
                 if (commandstr == "all" || find(optional_cmds.begin(), optional_cmds.end(), i.cmd) == optional_cmds.end())
                 output << i.cmd << " ";
@@ -809,6 +809,12 @@ void cmd_perftest(Datastructure& ds, ostream& output, MatchIter begin, MatchIter
         }
     }
     output << endl << endl;
+
+    if (testfuncs.empty())
+    {
+        output << "No commands to test!" << endl;
+        return;
+    }
 
     output << setw(7) << "N" << " , " << setw(12) << "add (sec)" << " , " << setw(12) << "cmds (sec)"  << " , " << setw(12) << "total (sec)" << endl;
 
