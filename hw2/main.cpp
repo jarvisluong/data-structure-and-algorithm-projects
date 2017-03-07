@@ -292,8 +292,8 @@ void cmd_higher_lower_ranks(Datastructure& ds, ostream& output, MatchIter begin,
     assert( begin == end && "Impossible number of parameters!");
 
     auto result = ds.higher_lower_ranks(id);
-    output << "Persons with higher rank : " << result.first << endl;
-    output << "Persons with lower rank : " << result.second << endl;
+    output << "Persons with higher rank (closer to ceo): " << result.first << endl;
+    output << "Persons with lower rank (further away from ceo): " << result.second << endl;
 }
 
 void test_higher_lower_ranks(Datastructure& ds)
