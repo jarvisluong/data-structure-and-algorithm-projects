@@ -104,6 +104,7 @@ void init_primes()
     // Initialize id generator
     prime1 = primes1[random<int>(0, primes1.size())];
     prime2 = primes2[random<int>(0, primes2.size())];
+    people_added = 0;
 }
 
 PersonID n_to_id(unsigned long int n)
@@ -195,7 +196,6 @@ void add_random_persons(Datastructure& ds, unsigned int size, bool even_boss = f
 {
     for (unsigned int i = 0; i < size; ++i)
     {
-        // Must be made unique!!
         string id = n_to_id(people_added);
 
         string name;
@@ -292,8 +292,8 @@ void cmd_higher_lower_ranks(Datastructure& ds, ostream& output, MatchIter begin,
     assert( begin == end && "Impossible number of parameters!");
 
     auto result = ds.higher_lower_ranks(id);
-    output << "Persons with higher rank : " << result.first << endl;
-    output << "Persons with lower rank : " << result.second << endl;
+    output << "Persons with higher rank (closer to ceo): " << result.first << endl;
+    output << "Persons with lower rank (further away from ceo): " << result.second << endl;
 }
 
 void test_higher_lower_ranks(Datastructure& ds)
@@ -497,7 +497,6 @@ void cmd_clear(Datastructure& ds, ostream& output, MatchIter begin, MatchIter en
 
     ds.clear();
     init_primes();
-    people_added = 0;
 
     output << "Cleared all persons" << endl;
 }
@@ -824,7 +823,6 @@ void cmd_perftest(Datastructure& ds, ostream& output, MatchIter begin, MatchIter
 
         ds.clear();
         init_primes();
-        people_added = 0;
 
         Stopwatch stopwatch;
         stopwatch.start();

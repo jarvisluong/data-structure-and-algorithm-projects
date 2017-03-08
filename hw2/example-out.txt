@@ -73,6 +73,6 @@ id richbastard : commander Miljoona Miikka, salary 1000000
 > nearest_common_boss doesall nobody
 id mm : basic worker Meikkis Matti, salary 2000
 > higher_lower_ranks mm
-Persons with higher rank : 3
-Persons with lower rank : 1
+Persons with higher rank (closer to ceo): 1
+Persons with lower rank (further away from ceo): 3
 > quit
