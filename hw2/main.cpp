@@ -57,9 +57,9 @@ using std::find_if;
 using std::find;
 using std::max_element;
 
-#include <cstdlib>
-using std::srand;
-using std::rand;
+#include <random>
+using std::minstd_rand;
+using std::uniform_int_distribution;
 
 #include <chrono>
 
@@ -82,12 +82,16 @@ using std::time;
 
 namespace
 {
+minstd_rand rand_engine;
+
 template <typename Type>
 Type random(Type start, Type end)
 {
     auto range = end-start;
+    assert(range != 0 && "random() with zero range!");
 
-    auto num = rand() % range;
+    auto num = uniform_int_distribution<unsigned long int>(0, range-1)(rand_engine);
+
     return static_cast<Type>(start+num);
 }
 
@@ -326,7 +330,7 @@ void cmd_randseed(Datastructure& /*ds*/, ostream& output, MatchIter begin, Match
 
     unsigned long int seed = convert_string_to<unsigned long int>(seedstr);
 
-    srand(seed);
+    rand_engine.seed(seed);
     init_primes();
 
     output << "Random seed set to " << seed << endl;
@@ -976,7 +980,7 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    srand(time(nullptr));
+    rand_engine.seed(time(nullptr));
 //    startmem = get<0>(mempeak());
 
     init_primes();
