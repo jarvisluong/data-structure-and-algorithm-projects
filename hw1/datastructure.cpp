@@ -21,41 +21,44 @@ Type random_in_range(Type start, Type end)
 
 // Mode determines how the data be sorted (by name or by salary)
 // mode == 'n' : Sort by name, mode == 's': Sort by salary
-void merge(vector<Person*>& A, int begin, int middle, int end, char mode) {
-        vector<Person*> B(A);
+void merge(vector<Person*>& A,int begin, int middle, int end, char mode) {
+        vector<Person*> B;
+        for (int i = begin; i<=end; i++) {
+            B.push_back(A[i]);
+        }
         int i = begin;
         int j = begin;
         int k = middle + 1;
         if (mode == 'n') {
                 while (j <= middle && k <= end) {
-                        if (B[j]->name <= B[k]->name) {
-                                A[i] = B[j];
+                        if (B[j-begin]->name <= B[k-begin]->name) {
+                                A[i] = B[j-begin];
                                 ++j;
                         } else {
-                                A[i] = B[k];
+                                A[i] = B[k-begin];
                                 ++k;
                         }
                         ++i;
                 }
                 k = j>middle ? 0 : (middle-end);
                 for (j=i; j<=end; ++j) {
-                        A[j] = B[j+k];
+                        A[j] = B[j+k-begin];
                 }
         }
         else if (mode == 's') {
                 while ((j <= middle) && (k <= end)) {
-                        if (B[j]->salary <= B[k]->salary) {
-                                A[i] = B[j];
+                        if (B[j-begin]->salary <= B[k-begin]->salary) {
+                                A[i] = B[j-begin];
                                 ++j;
                         } else {
-                                A[i] = B[k];
+                                A[i] = B[k-begin];
                                 ++k;
                         }
                         ++i;
                 }
                 k = j>middle ? 0 : (middle-end);
                 for (j=i; j<=end; ++j) {
-                        A[j] = B[j+k];
+                        A[j] = B[j+k-begin];
                 }
         }
 }
