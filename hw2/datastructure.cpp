@@ -7,6 +7,10 @@
 using std::cerr;
 using std::endl;
 
+#include <algorithm>
+using std::sort;
+using std::find;
+
 template <typename Type>
 Type random_in_range(Type start, Type end)
 {
@@ -243,7 +247,8 @@ void Datastructure::clear()
 
 vector<PersonID> Datastructure::underlings(PersonID id)
 {
-        return id_dict[id].underlings;
+        sort(id_dict[id].underlings.begin(), id_dict[id].underlings.end());
+        return(id_dict[id].underlings);
 }
 
 vector<PersonID> Datastructure::all_underlings(vector<PersonID> &ids)

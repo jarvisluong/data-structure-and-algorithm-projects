@@ -25,11 +25,6 @@ using std::set;
 #include <utility>
 using std::pair;
 
-#include <algorithm>
-using std::sort;
-using std::find;
-using std::inplace_merge;
-
 using PersonID = string;
 PersonID const NO_ID = "";
 
