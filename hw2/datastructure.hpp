@@ -94,12 +94,6 @@ multimap<Salary, PersonID> salary_dict;
 
 // Since we need to find person by ID alot then this unordered_map is ideal
 unordered_map<PersonID, Person> id_dict;
-
-// // Store the already sorted salary people
-// vector<PersonID> salary_sort;
-
-// // // Keep track of newly added people to merge them to the above vector later.
-// // vector<PersonID> newly_added_people;
 };
 
 #endif // DATASTRUCTURE_HPP
