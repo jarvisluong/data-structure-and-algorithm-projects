@@ -151,6 +151,8 @@ PersonID Datastructure::third_quartile_salary()
 }
 
 // After this are the new operations of hw3
+// NOTE!!! Add all your new hw3 code here below these comments (to keep it
+// separated from old hw2 code).
 void Datastructure::add_friendship(PersonID id, PersonID friendid, Cost cost)
 {
 
