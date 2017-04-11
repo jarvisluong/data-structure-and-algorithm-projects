@@ -1,5 +1,5 @@
 # Read in all tests in one go
-testread 'biggertest-cheapest_friendpath-in.txt' 'biggertest-cheapest_friendpath-out.txt'
+testread 'biggertest-shortest_friendpath-in.txt' 'biggertest-shortest_friendpath-out.txt'
 clear
 testread 'biggertest-check_boss_hierarchy-in.txt' 'biggertest-check_boss_hierarchy-out.txt'
 clear
