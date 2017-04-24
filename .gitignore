@@ -2,3 +2,5 @@
 build-*
 # File management in OS X should not be in git 
 .DS_Store
+.idea/
+cmake-build-debug/
