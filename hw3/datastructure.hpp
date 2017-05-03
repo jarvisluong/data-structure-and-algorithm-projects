@@ -25,9 +25,6 @@ using std::unordered_map;
 #include <set>
 using std::set;
 
-#include <unordered_set>
-using std::unordered_set;
-
 #include <utility>
 using std::pair;
 
@@ -40,24 +37,26 @@ Salary const NO_SALARY = -1;
 using Cost = int;
 Cost const NO_COST = -1;
 
-struct Person {
-        PersonID id;
-        string name;
-        Salary salary;
-        string title;
+struct Person
+{
+    PersonID id;
+    string name;
+    Salary salary;
+    string title;
 
-        bool leader = false;
-        PersonID bossid = NO_ID;
-        vector<PersonID> underlings;
+    bool leader = false;
+    PersonID bossid = NO_ID;
+    vector<PersonID> underlings;
 
-        unordered_map<PersonID, Cost> friends;
-        int color = 0;
-        PersonID nearest_friend = NO_ID;
+    unordered_map<PersonID, Cost> friends;
+    int color = 0;
+    int cost_to_source_friend = NO_COST;
+    PersonID nearest_friend = NO_ID;
 };
 
 class Datastructure
 {
-public:
+  public:
     Datastructure();
     ~Datastructure();
 
@@ -79,7 +78,7 @@ public:
     void clear();
 
     vector<PersonID> underlings(PersonID id);
-    vector<PersonID> all_underlings(vector<PersonID>& ids);
+    vector<PersonID> all_underlings(vector<PersonID> &ids);
     vector<PersonID> personnel_alphabetically();
     vector<PersonID> personnel_salary_order();
 
@@ -105,14 +104,16 @@ public:
 
     bool check_boss_hierarchy();
     vector<pair<PersonID, Cost>> shortest_friendpath(PersonID fromid, PersonID toid);
-    vector<pair<PersonID, Cost>> shortest_friendpath_helper(PersonID fromid, PersonID toid);
+    vector<pair<PersonID, Cost>> print_path(PersonID fromid, PersonID toid);
     vector<pair<PersonID, Cost>> cheapest_friendpath(PersonID fromid, PersonID toid);
     pair<unsigned int, Cost> leave_cheapest_friendforest();
 
-private:
+    void relax_dijkstra(Person &current, Person &neighbor);
+
+  private:
     // This map is used to find name quickly, and use the alphalist quick
     // (map and set have been already sorted)
-    map<string, set<PersonID> > name_dict;
+    map<string, set<PersonID>> name_dict;
 
     // We don't need to sort through salary since we got this
     multimap<Salary, PersonID> salary_dict;

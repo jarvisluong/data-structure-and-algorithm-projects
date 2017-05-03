@@ -20,29 +20,35 @@ using std::pair;
 
 #include <queue>
 using std::queue;
+using std::priority_queue;
+
+#include <unordered_set>
+using std::unordered_set;
 
 minstd_rand rand_engine; // Reasonably quick pseudo-random generator
 
 template <typename Type>
 Type random_in_range(Type start, Type end)
 {
-    auto range = end-start;
-    ++range;
+        auto range = end - start;
+        ++range;
 
-    auto num = uniform_int_distribution<unsigned long int>(0, range-1)(rand_engine);
+        auto num = uniform_int_distribution<unsigned long int>(0, range - 1)(rand_engine);
 
-    return static_cast<Type>(start+num);
+        return static_cast<Type>(start + num);
 }
 
+bool operator<(const Person &left, const Person &right)
+{
+        return (left.cost_to_source_friend == NO_COST) || (left.cost_to_source_friend > right.cost_to_source_friend);
+}
 
 Datastructure::Datastructure()
 {
-
 }
 
 Datastructure::~Datastructure()
 {
-
 }
 
 void Datastructure::add_person(string name, PersonID id, string title, Salary salary)
@@ -269,7 +275,7 @@ void Datastructure::clear()
 vector<PersonID> Datastructure::underlings(PersonID id)
 {
         sort(id_dict[id].underlings.begin(), id_dict[id].underlings.end());
-        return(id_dict[id].underlings);
+        return (id_dict[id].underlings);
 }
 
 vector<PersonID> Datastructure::all_underlings(vector<PersonID> &ids)
@@ -314,7 +320,7 @@ vector<PersonID> Datastructure::personnel_salary_order()
 PersonID Datastructure::find_ceo()
 {
         vector<PersonID> leaders;
-        for (auto current_pair : id_dict)
+        for (auto const &current_pair : id_dict)
         {
                 // If freelancer (i.e no boss and no underlings) is spotted
                 if (current_pair.second.bossid == NO_ID && current_pair.second.underlings.size() == 0)
@@ -476,7 +482,7 @@ void Datastructure::add_friendship(PersonID id, PersonID friendid, Cost cost)
         {
                 return;
         }
-        else 
+        else
         {
                 iter_id->second.friends.insert({friendid, cost});
                 iter_friendid->second.friends.insert({id, cost});
@@ -493,8 +499,8 @@ void Datastructure::remove_friendship(PersonID id, PersonID friendid)
         }
         auto id_find_friendid = iter_id->second.friends.find(friendid);
         auto friendid_find_id = iter_friendid->second.friends.find(id);
-        if (id_find_friendid == iter_id->second.friends.end() || 
-                friendid_find_id == iter_friendid->second.friends.end())
+        if (id_find_friendid == iter_id->second.friends.end() ||
+            friendid_find_id == iter_friendid->second.friends.end())
         {
                 return;
         }
@@ -505,42 +511,43 @@ void Datastructure::remove_friendship(PersonID id, PersonID friendid)
 vector<pair<PersonID, Cost>> Datastructure::get_friends(PersonID id)
 {
         auto iter_id = id_dict.find(id);
-        if (iter_id == id_dict.end()) return {};
+        if (iter_id == id_dict.end())
+                return {};
         vector<pair<PersonID, Cost>> output;
-        for (auto friendship: iter_id->second.friends)
+        for (auto const &friendship : iter_id->second.friends)
         {
                 output.push_back({friendship.first, friendship.second});
         }
         sort(output.begin(), output.end());
-    return output; // Replace this with the actual implementation
+        return output; // Replace this with the actual implementation
 }
 
 vector<pair<PersonID, PersonID>> Datastructure::all_friendships()
 {
         unordered_map<PersonID, Person> temp_id_dict = id_dict;
         vector<pair<PersonID, PersonID>> output;
-        for (auto person: temp_id_dict)
+        for (auto const &person : temp_id_dict)
         {
-                for (auto friendship: person.second.friends)
+                for (auto const &friendship : person.second.friends)
                 {
                         if (person.first > friendship.first)
                         {
-                               output.push_back({friendship.first,person.first}); 
-                        } else 
+                                output.push_back({friendship.first, person.first});
+                        }
+                        else
                         {
                                 output.push_back({person.first, friendship.first});
                         }
                         temp_id_dict[friendship.first].friends.erase(person.first);
                 }
-                
         }
         sort(output.begin(), output.end());
-    return output; // Replace this with the actual implementation
+        return output; // Replace this with the actual implementation
 }
 
-vector<pair<PersonID, Cost> > Datastructure::shortest_friendpath(PersonID fromid, PersonID toid)
+vector<pair<PersonID, Cost>> Datastructure::shortest_friendpath(PersonID fromid, PersonID toid)
 {
-        for (auto person: id_dict)
+        for (auto &person : id_dict)
         {
                 person.second.color = 0;
                 person.second.nearest_friend = NO_ID;
@@ -552,22 +559,21 @@ vector<pair<PersonID, Cost> > Datastructure::shortest_friendpath(PersonID fromid
         {
                 PersonID processing_id = process_queue.front();
                 process_queue.pop();
-                for (auto friendship: id_dict[processing_id].friends)
+                for (auto const &friendship : id_dict[processing_id].friends)
                 {
                         if (id_dict[friendship.first].color == 0)
                         {
-                             id_dict[friendship.first].color = 1;
-                             id_dict[friendship.first].nearest_friend = processing_id;
-                             process_queue.push(friendship.first);   
+                                id_dict[friendship.first].color = 1;
+                                id_dict[friendship.first].nearest_friend = processing_id;
+                                process_queue.push(friendship.first);
                         }
                 }
         }
 
-
-    return shortest_friendpath_helper(fromid, toid); 
+        return print_path(fromid, toid);
 }
 
-vector<pair<PersonID, Cost> > Datastructure::shortest_friendpath_helper(PersonID fromid, PersonID toid)
+vector<pair<PersonID, Cost>> Datastructure::print_path(PersonID fromid, PersonID toid)
 {
         if (fromid == toid)
         {
@@ -577,22 +583,110 @@ vector<pair<PersonID, Cost> > Datastructure::shortest_friendpath_helper(PersonID
         {
                 return {};
         }
-        vector<pair<PersonID, Cost>> output = shortest_friendpath_helper(fromid, id_dict[toid].nearest_friend);
+        vector<pair<PersonID, Cost>> output = print_path(fromid, id_dict[toid].nearest_friend);
         output.push_back({toid, id_dict[toid].friends[id_dict[toid].nearest_friend]});
         return output;
 }
 
 bool Datastructure::check_boss_hierarchy()
 {
-    return false; // Replace this with the actual implementation
+        vector<PersonID> leaders;
+        for (auto const &current_pair : id_dict)
+        {
+                // If freelancer (i.e no boss and no underlings) is spotted
+                if (current_pair.second.bossid == NO_ID && current_pair.second.underlings.size() == 0)
+                {
+                        return false;
+                }
+                if (current_pair.second.leader == true)
+                {
+                        leaders.push_back(current_pair.first);
+                }
+        }
+
+        if (leaders.size() != 1)
+        {
+                return false;
+        }
+
+        for (auto &person : id_dict)
+        {
+                person.second.color = 0;
+        }
+        int visited_people = 1;
+        queue<PersonID> process_queue;
+        id_dict[leaders.front()].color = 1;
+        process_queue.push(leaders.front());
+
+        while (process_queue.size())
+        {
+                PersonID processing_id = process_queue.front();
+                process_queue.pop();
+                for (auto const &underling : id_dict[processing_id].underlings)
+                {
+                        if (id_dict[underling].color == 0)
+                        {
+                                ++visited_people;
+                                id_dict[underling].color = 1;
+                                process_queue.push(underling);
+                                continue;
+                        }
+                        if (id_dict[underling].color == 1)
+                        {
+                                return false;
+                        }
+                }
+        }
+
+        return visited_people == id_dict.size(); // Replace this with the actual implementation
 }
 
 vector<pair<PersonID, Cost>> Datastructure::cheapest_friendpath(PersonID fromid, PersonID toid)
 {
-    return {}; // Replace this with the actual implementation
+        for (auto &person : id_dict)
+        {
+                person.second.color = 0;
+                person.second.cost_to_source_friend = NO_COST;
+                person.second.nearest_friend = NO_ID;
+        }
+
+        priority_queue<Person> process_queue;
+        id_dict[fromid].color = 1;
+        id_dict[fromid].cost_to_source_friend = 0;
+        id_dict[fromid].nearest_friend = NO_ID;
+        process_queue.push(id_dict[fromid]);
+        while (process_queue.size())
+        {
+                Person processing_person = process_queue.top();
+                process_queue.pop();
+                for (auto const &friendship : id_dict[processing_person.id].friends)
+                {
+                        if (id_dict[friendship.first].color == 0)
+                        {
+                                id_dict[friendship.first].color = 1;
+                                relax_dijkstra(processing_person, id_dict[friendship.first]);
+                                process_queue.push(id_dict[friendship.first]);
+                                continue;
+                        }
+                        relax_dijkstra(processing_person, id_dict[friendship.first]);
+                }
+        }
+        return print_path(fromid, toid); // Replace this with the actual implementation
+}
+
+void Datastructure::relax_dijkstra(Person &current, Person &neighbor)
+{
+        if ((neighbor.cost_to_source_friend == NO_COST) ||
+            (neighbor.cost_to_source_friend > (current.cost_to_source_friend + current.friends[neighbor.id])))
+        {
+                // id_dict[neighbor.id].cost_to_source_friend = current.cost_to_source_friend + current.friends[neighbor.id];
+                // id_dict[neighbor.id].nearest_friend = current.id;
+                neighbor.cost_to_source_friend = current.cost_to_source_friend + current.friends[neighbor.id];
+                neighbor.nearest_friend = current.id;
+        }
 }
 
 pair<unsigned int, Cost> Datastructure::leave_cheapest_friendforest()
 {
-    return {}; // Replace this with the actual implementation
+        return {}; // Replace this with the actual implementation
 }
